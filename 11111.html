@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Красота">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fdf1f4">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+<title>Красота</title>
+<style>
+:root{--bg:#fdf1f4;--card:#fff;--ink:#2b2226;--mute:#8a7a80;--line:#f0dde3;--rose:#c8567a;--rose2:#f7d3de;--ok:#2f8f5b;--okbg:#e0f3e8;--no:#c0392b;--nobg:#fbe0dc;--warn:#9a6a00;--warnbg:#fff0cc}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 14px 8px;display:flex;align-items:center;justify-content:space-between}
+h1{font-size:22px;margin:0;font-weight:600}
+main{padding:0 14px}
+.seg{display:flex;background:var(--rose2);border-radius:12px;padding:3px;margin:6px 0 10px}
+.seg button{flex:1;border:0;background:none;padding:8px 2px;border-radius:10px;font-size:13px;color:var(--ink)}
+.seg button.on{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:14px;color:var(--ink)}
+.chip.on{background:var(--rose);border-color:var(--rose);color:#fff}
+.chip.sm{font-size:13px;padding:4px 10px}
+.card{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin:0 0 8px}
+.ph{width:64px;height:64px;border-radius:10px;background:var(--rose2);flex:none;object-fit:cover;display:flex;align-items:center;justify-content:center;color:var(--rose);font-size:22px}
+.card .t{font-weight:600;font-size:15px}
+.card .m{font-size:13px;color:var(--mute)}
+.tag{display:inline-block;font-size:12px;border-radius:8px;padding:2px 8px;margin:3px 4px 0 0}
+.ok{background:var(--okbg);color:var(--ok)}.no{background:var(--nobg);color:var(--no)}.wn{background:var(--warnbg);color:var(--warn)}.nt{background:var(--rose2);color:var(--rose)}
+.acts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 10px;font-size:13px;color:var(--ink)}
+.btn.p{background:var(--rose);border-color:var(--rose);color:#fff}
+.btn.big{padding:12px;font-size:16px;width:100%;border-radius:12px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:6}
+nav button{flex:1;border:0;background:none;padding:6px 2px;font-size:11px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button span{font-size:22px;line-height:1}
+nav button.on{color:var(--rose);font-weight:600}
+.fab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;border:0;background:var(--rose);color:#fff;font-size:30px;z-index:7;box-shadow:0 4px 12px rgba(200,86,122,.4)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:20;display:flex;align-items:flex-end}
+.sheet{background:var(--bg);width:100%;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:14px 14px calc(18px + env(safe-area-inset-bottom))}
+.sheet h2{margin:0 0 10px;font-size:18px}
+label{display:block;font-size:13px;color:var(--mute);margin:10px 0 3px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px;font-size:16px;font-family:inherit;color:var(--ink)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.empty{text-align:center;color:var(--mute);padding:30px 10px}
+.hint{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:8px 10px;font-size:13px;margin:6px 0}
+.slot{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin:0 0 10px}
+.slot h3{margin:0 0 6px;font-size:15px}
+.mini{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line)}
+.mini .ph{width:40px;height:40px;font-size:16px}
+.mini .n{flex:1;font-size:14px}
+.photoBox{display:flex;align-items:center;gap:10px}
+.photoBox .ph{width:84px;height:84px}
+.note{font-size:12px;color:var(--mute);text-align:center;padding:12px}
+</style>
+</head>
+<body>
+<header><h1 id="ttl">Красота</h1><button class="btn" id="menuBtn">Копия</button></header>
+<main id="main"></main>
+<nav id="nav"></nav>
+<div id="modal"></div>
+
+<script type="module">
+const CFG = {
+  apiKey: "AIzaSyCwwmfWzDEFjxTia4q0yGs6nmp6dGNXaT8",
+  authDomain: "recipes-127dc.firebaseapp.com",
+  projectId: "recipes-127dc",
+  storageBucket: "recipes-127dc.firebasestorage.app",
+  messagingSenderId: "649748139145",
+  appId: "1:649748139145:web:48cc9471e71527937d4a58"
+};
+
+const DECO = {
+  "Лицо":["Тональные средства","Консилеры","Праймеры","Пудра","Румяна","Скульпторы и контуринг","Бронзеры","Хайлайтеры","Фиксаторы макияжа"],
+  "Глаза":["Тени","Карандаши для глаз","Подводки и лайнеры","Тушь","Пигменты и глиттеры"],
+  "Брови":["Карандаши и пудры","Гели и фиксаторы","Помады для бровей"],
+  "Губы":["Помады","Блески","Карандаши для губ","Тинты","Бальзамы"],
+  "Ногти":["Лаки","Уход за ногтями"],
+  "Инструменты":["Кисти","Спонжи","Прочее"]
+};
+const CARE = {
+  "Очищение":["Гели и пенки","Гидрофильные масла","Мицеллярная вода","Скрабы и пилинги"],
+  "Тонизирование":["Тонеры","Эссенции","Мисты"],
+  "Сыворотки":["Увлажняющие","Витамин C","Кислоты","Ретиноиды","Ниацинамид","Прочие"],
+  "Кремы":["Дневные","Ночные","Вокруг глаз","Гидрогели и патчи"],
+  "Маски":["Тканевые","Глиняные","Ночные"],
+  "SPF":["Для лица","Для тела"],
+  "Губы":["Бальзамы","Маски для губ"],
+  "Тело":["Гели для душа","Кремы и лосьоны","Скрабы"],
+  "Волосы":["Шампуни","Кондиционеры и маски","Несмываемый уход"]
+};
+const PERF = {
+  "Духи":["Цветочные","Восточные","Древесные","Свежие и цитрусовые","Гурманские","Мускусные"],
+  "Парфюмерная вода":["Цветочные","Восточные","Древесные","Свежие и цитрусовые","Гурманские","Мускусные"],
+  "Туалетная вода":["Цветочные","Восточные","Древесные","Свежие и цитрусовые","Гурманские","Мускусные"],
+  "Одеколон":["Свежие и цитрусовые","Древесные","Прочие"],
+  "Пробники и миниатюры":["Пробники","Миниатюры","Наборы"],
+  "Масла и сухие духи":["Масла","Сухие духи","Парфюмированные спреи"]
+};
+const ORAL = {
+  "Зубные пасты":["Отбеливающие","Для чувствительных зубов","Ежедневные","Лечебные","Детские"],
+  "Щётки":["Ручные","Электрические","Насадки"],
+  "Ополаскиватели":["Антибактериальные","Для чувствительных зубов","Отбеливающие","Ежедневные"],
+  "Межзубный уход":["Нити","Ёршики","Ирригаторы","Зубочистки"],
+  "Отбеливание":["Полоски","Гели и карандаши","Домашние системы"],
+  "Прочее":["Гели и спреи для дёсен","Освежители дыхания","Аксессуары"]
+};
+const TAX = {deco: DECO, care: CARE, perf: PERF, oral: ORAL};
+const KLABEL = {deco: "Декоративная", care: "Уход", perf: "Парфюмерия"};
+const ACTIVES = ["", "Ретинол", "Кислоты", "Витамин C", "Бензоилпероксид", "Ниацинамид"];
+const BAD = [["Ретинол","Кислоты"],["Ретинол","Витамин C"],["Ретинол","Бензоилпероксид"],["Кислоты","Витамин C"]];
+const DAYS = [["mon","Пн"],["tue","Вт"],["wed","Ср"],["thu","Чт"],["fri","Пт"],["sat","Сб"],["sun","Вс"]];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+let items = [];
+let routine = {days: {}};
+let store = null;
+const ui = {tab: "cat", kind: "deco", cat: "", sub: "", flt: "all", shop: "need", day: "mon", bagKind: "all"};
+
+/* ---------- хранилище ---------- */
+async function makeStore() {
+  const code = await getCode();
+  if (CFG.projectId) {
+    try {
+      const {initializeApp} = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+      const fs = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      const app = initializeApp(CFG);
+      const db = fs.initializeFirestore(app, {localCache: fs.persistentLocalCache()});
+      const col = fs.collection(db, "users", code, "items");
+      const rdoc = fs.doc(db, "users", code, "meta", "routine");
+      return {
+        mode: "cloud",
+        sub(cb) {
+          fs.onSnapshot(col, s => cb({items: s.docs.map(d => d.data())}));
+          fs.onSnapshot(rdoc, d => cb({routine: d.exists() ? d.data() : {days: {}}}));
+        },
+        save: it => fs.setDoc(fs.doc(db, "users", code, "items", it.id), it),
+        del: id => fs.deleteDoc(fs.doc(db, "users", code, "items", id)),
+        saveRoutine: r => fs.setDoc(rdoc, r)
+      };
+    } catch (e) { console.error(e); }
+  }
+  const k = "beauty_local_" + code;
+  const load = () => { try { return JSON.parse(localStorage.getItem(k)) || {items: [], routine: {days: {}}}; } catch (e) { return {items: [], routine: {days: {}}}; } };
+  let cb = () => {};
+  const put = d => { try { localStorage.setItem(k, JSON.stringify(d)); } catch (e) { alert("Память переполнена, подключи Firebase"); } cb({items: d.items, routine: d.routine}); };
+  return {
+    mode: "local",
+    sub(f) { cb = f; const d = load(); f({items: d.items, routine: d.routine}); },
+    save(it) { const d = load(); const i = d.items.findIndex(x => x.id === it.id); if (i < 0) d.items.push(it); else d.items[i] = it; put(d); return Promise.resolve(); },
+    del(id) { const d = load(); d.items = d.items.filter(x => x.id !== id); put(d); return Promise.resolve(); },
+    saveRoutine(r) { const d = load(); d.routine = r; put(d); return Promise.resolve(); }
+  };
+}
+function getCode() {
+  return new Promise(res => {
+    let c = "";
+    try { c = localStorage.getItem("beauty_code") || ""; } catch (e) {}
+    if (c) return res(c);
+    $("#modal").innerHTML = `<div class="ov"><div class="sheet"><h2>Код доступа</h2><p class="m" style="color:var(--mute)">Придумай длинный код из букв и цифр. Он нужен один раз на каждом телефоне, по нему приложение находит твои данные.</p><input id="codeIn" placeholder="например nastya2026kr"><div style="height:10px"></div><button class="btn p big" id="codeOk">Войти</button></div></div>`;
+    $("#codeOk").onclick = () => {
+      const v = $("#codeIn").value.trim().replace(/[^A-Za-z0-9_-]/g, "");
+      if (v.length < 6) { alert("Код короче 6 символов"); return; }
+      try { localStorage.setItem("beauty_code", v); } catch (e) {}
+      $("#modal").innerHTML = ""; res(v);
+    };
+  });
+}
+
+/* ---------- даты и срок годности ---------- */
+function expDate(it) {
+  if (it.expiry) return new Date(it.expiry);
+  if (it.opened && it.pao) { const d = new Date(it.opened); d.setMonth(d.getMonth() + Number(it.pao)); return d; }
+  return null;
+}
+function expInfo(it) {
+  const d = expDate(it); if (!d || isNaN(d)) return null;
+  const days = Math.round((d - new Date()) / 86400000);
+  const txt = d.toLocaleDateString("ru-RU");
+  if (days < 0) return {cls: "no", t: "истёк " + txt, soon: true};
+  if (days <= 30) return {cls: "wn", t: "до " + txt, soon: true};
+  return {cls: "nt", t: "до " + txt, soon: false};
+}
+const money = v => v ? Number(v).toLocaleString("ru-RU") + " ₽" : "";
+
+/* ---------- фото ---------- */
+function compress(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const im = new Image();
+      im.onload = () => {
+        const m = 640, k = Math.min(1, m / Math.max(im.width, im.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+        c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+        let q = 0.72, out = c.toDataURL("image/jpeg", q);
+        while (out.length > 180000 && q > 0.3) { q -= 0.1; out = c.toDataURL("image/jpeg", q); }
+        res(out);
+      };
+      im.onerror = rej; im.src = r.result;
+    };
+    r.onerror = rej; r.readAsDataURL(file);
+  });
+}
+
+/* ---------- отрисовка ---------- */
+const thumb = it => it.photo ? `<img class="ph" src="${it.photo}" alt="">` : `<div class="ph">♡</div>`;
+const title = it => esc([it.brand, it.name].filter(Boolean).join(" · ") || "Без названия");
+
+function card(it, ctx) {
+  const e = expInfo(it);
+  const tags = [];
+  if (it.verdict === "take") tags.push(`<span class="tag ok">✓ берём</span>`);
+  if (it.verdict === "skip") tags.push(`<span class="tag no">✕ не берём</span>`);
+  if (it.active) tags.push(`<span class="tag nt">${esc(it.active)}</span>`);
+  if (e) tags.push(`<span class="tag ${e.cls}">${e.t}</span>`);
+  const meta = [it.shade ? (it.kind === "perf" || it.kind === "oral" ? "" : "оттенок ") + esc(it.shade) : "", money(it.price), it.where ? esc(it.where) : ""].filter(Boolean).join(" · ");
+  let acts = `<button class="btn" data-a="edit" data-id="${it.id}">Изменить</button>`;
+  if (ctx === "cat") acts += it.inBag ? `<button class="btn" data-a="bag" data-id="${it.id}">Убрать из косметички</button>` : `<button class="btn p" data-a="bag" data-id="${it.id}">В косметичку</button>`;
+  if (ctx === "shop") acts += `<button class="btn p" data-a="bought" data-id="${it.id}">Купила</button>`;
+  return `<div class="card">${thumb(it)}<div style="flex:1;min-width:0"><div class="t">${title(it)}</div><div class="m">${esc(it.sub || it.cat || "")}${meta ? " · " + meta : ""}</div>${tags.join("")}${it.comment ? `<div class="m" style="margin-top:3px">${esc(it.comment)}</div>` : ""}<div class="acts">${acts}</div></div></div>`;
+}
+
+function filters() {
+  return `<div class="chips">${[["all","Все"],["take","✓ Берём"],["skip","✕ Не берём"],["soon","Скоро истекает"]].map(f => `<button class="chip sm ${ui.flt === f[0] ? "on" : ""}" data-a="flt" data-v="${f[0]}">${f[1]}</button>`).join("")}</div>`;
+}
+function applyFlt(list) {
+  if (ui.flt === "take") return list.filter(i => i.verdict === "take");
+  if (ui.flt === "skip") return list.filter(i => i.verdict === "skip");
+  if (ui.flt === "soon") return list.filter(i => { const e = expInfo(i); return e && e.soon; });
+  return list;
+}
+
+function viewTree(list, ctx, kinds) {
+  let h = "";
+  if (kinds === "both") {
+    h += `<div class="seg">${[["deco","Декоративная"],["care","Уход"],["perf","Парфюмерия"],["oral","Полость рта"]].map(k => `<button class="${ui.kind === k[0] ? "on" : ""}" data-a="kind" data-v="${k[0]}">${k[1]}</button>`).join("")}</div>`;
+  }
+  const tax = TAX[ui.kind];
+  h += `<div class="chips"><button class="chip ${!ui.cat ? "on" : ""}" data-a="cat" data-v="">Все</button>${Object.keys(tax).map(c => `<button class="chip ${ui.cat === c ? "on" : ""}" data-a="cat" data-v="${esc(c)}">${esc(c)}</button>`).join("")}</div>`;
+  if (ui.cat && tax[ui.cat]) h += `<div class="chips"><button class="chip sm ${!ui.sub ? "on" : ""}" data-a="sub" data-v="">Всё</button>${tax[ui.cat].map(s => `<button class="chip sm ${ui.sub === s ? "on" : ""}" data-a="sub" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>`;
+  h += filters();
+  let l = list.filter(i => i.kind === ui.kind && (!ui.cat || i.cat === ui.cat) && (!ui.sub || i.sub === ui.sub));
+  l = applyFlt(l);
+  h += l.length ? l.map(i => card(i, ctx)).join("") : `<div class="empty">Здесь пока пусто.<br>Нажми «+», чтобы добавить.</div>`;
+  return h;
+}
+
+function viewCat() { return viewTree(items.filter(i => i.status === "used"), "cat", "both"); }
+function viewBag() { return viewTree(items.filter(i => i.status === "used" && i.inBag), "bag", "both"); }
+
+function hintsFor(ids) {
+  const act = new Set(); ids.forEach(id => { const it = items.find(x => x.id === id); if (it && it.active) act.add(it.active); });
+  const out = [];
+  BAD.forEach(p => { if (act.has(p[0]) && act.has(p[1])) out.push(`${p[0]} и ${p[1]} в один заход: как правило, лучше развести по разным дням или по утру и вечеру. Проверь по своей коже.`); });
+  return out;
+}
+function viewRoutine() {
+  const d = routine.days[ui.day] || {am: [], pm: []};
+  let h = `<div class="chips">${DAYS.map(x => `<button class="chip ${ui.day === x[0] ? "on" : ""}" data-a="day" data-v="${x[0]}">${x[1]}</button>`).join("")}</div>`;
+  [["am","Утро"],["pm","Вечер"]].forEach(s => {
+    const ids = d[s[0]] || [];
+    h += `<div class="slot"><h3>${s[1]}</h3>`;
+    ids.forEach((id, n) => {
+      const it = items.find(x => x.id === id);
+      if (!it) return;
+      h += `<div class="mini">${thumb(it)}<div class="n">${title(it)}<div class="m" style="font-size:12px;color:var(--mute)">${esc(it.sub || "")}</div></div><button class="btn" data-a="rmslot" data-slot="${s[0]}" data-n="${n}">✕</button></div>`;
+    });
+    if (!ids.length) h += `<div class="m" style="color:var(--mute);font-size:13px">Пока ничего</div>`;
+    hintsFor(ids).forEach(t => h += `<div class="hint">${esc(t)}</div>`);
+    if (s[0] === "am" && ids.some(id => { const it = items.find(x => x.id === id); return it && it.active === "Ретинол"; })) h += `<div class="hint">Ретинол обычно ставят вечером, а утром берут SPF.</div>`;
+    h += `<div class="acts"><button class="btn p" data-a="addslot" data-slot="${s[0]}">+ Добавить средство</button></div></div>`;
+  });
+  h += `<button class="btn big" data-a="copyday">Скопировать этот день на всю неделю</button>`;
+  return h;
+}
+
+function viewShop() {
+  let h = `<div class="seg">${[["need","Нужно"],["wish","Хочу попробовать"]].map(k => `<button class="${ui.shop === k[0] ? "on" : ""}" data-a="shop" data-v="${k[0]}">${k[1]}</button>`).join("")}</div>`;
+  const l = items.filter(i => i.status === ui.shop);
+  h += l.length ? l.map(i => card(i, "shop")).join("") : `<div class="empty">Список пуст.<br>Нажми «+», чтобы добавить.</div>`;
+  return h;
+}
+
+function render() {
+  const t = {cat: "Каталог", bag: "Моя косметичка", rut: "Рутина", shop: "Покупки"}[ui.tab];
+  $("#ttl").textContent = t;
+  let h = "";
+  if (store && store.mode === "local") h += `<div class="hint">Пока данные хранятся только на этом телефоне. Подключи Firebase, чтобы они сохранялись навсегда.</div>`;
+  h += {cat: viewCat, bag: viewBag, rut: viewRoutine, shop: viewShop}[ui.tab]();
+  $("#main").innerHTML = h;
+  $("#nav").innerHTML = [["cat","☰","Каталог"],["bag","♡","Косметичка"],["rut","☀","Рутина"],["shop","✓","Покупки"]].map(x => `<button class="${ui.tab === x[0] ? "on" : ""}" data-a="tab" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
+  const fab = $("#fab");
+  if (fab) fab.remove();
+  if (ui.tab !== "rut") document.body.insertAdjacentHTML("beforeend", `<button class="fab" id="fab" data-a="add">+</button>`);
+}
+
+/* ---------- форма ---------- */
+function openForm(it) {
+  const isNew = !it;
+  const d = it ? JSON.parse(JSON.stringify(it)) : {id: uid(), kind: ui.kind, cat: ui.cat || "", sub: ui.sub || "", status: ui.tab === "shop" ? ui.shop : "used", inBag: ui.tab === "bag", verdict: "", photo: ""};
+  const opt = (arr, v) => arr.map(x => `<option ${x === v ? "selected" : ""}>${esc(x)}</option>`).join("");
+  const draw = () => {
+    const tax = TAX[d.kind];
+    const cats = Object.keys(tax);
+    if (!tax[d.cat]) { d.cat = cats[0]; d.sub = ""; }
+    const subs = tax[d.cat];
+    if (!subs.includes(d.sub)) d.sub = subs[0];
+    $("#modal").innerHTML = `<div class="ov"><div class="sheet"><h2>${isNew ? "Новое средство" : "Изменить"}</h2>
+    <div class="photoBox">${d.photo ? `<img class="ph" src="${d.photo}">` : `<div class="ph">♡</div>`}<div><input type="file" id="fPh" accept="image/*" style="display:none"><button class="btn p" id="fPhBtn">${d.photo ? "Заменить фото" : "Добавить фото"}</button></div></div>
+    <label>Тип</label><select id="fKind"><option value="deco" ${d.kind === "deco" ? "selected" : ""}>Декоративная</option><option value="care" ${d.kind === "care" ? "selected" : ""}>Уход</option><option value="perf" ${d.kind === "perf" ? "selected" : ""}>Парфюмерия</option><option value="oral" ${d.kind === "oral" ? "selected" : ""}>Уход за полостью рта</option></select>
+    <div class="row"><div><label>Категория</label><select id="fCat">${opt(cats, d.cat)}</select></div><div><label>Подкатегория</label><select id="fSub">${opt(subs, d.sub)}</select></div></div>
+    <div class="row"><div><label>Бренд</label><input id="fBrand" value="${esc(d.brand)}"></div><div><label>Название</label><input id="fName" value="${esc(d.name)}"></div></div>
+    <div class="row"><div><label>${d.kind === "perf" ? "Ноты и объём" : d.kind === "oral" ? "Вкус и объём" : "Оттенок"}</label><input id="fShade" value="${esc(d.shade)}"></div><div><label>Цена, ₽</label><input id="fPrice" type="number" inputmode="decimal" value="${esc(d.price)}"></div></div>
+    <label>Где куплено</label><input id="fWhere" value="${esc(d.where)}">
+    <label>Статус</label><select id="fStatus"><option value="used" ${d.status === "used" ? "selected" : ""}>Пользовалась или пользуюсь</option><option value="need" ${d.status === "need" ? "selected" : ""}>Нужно купить</option><option value="wish" ${d.status === "wish" ? "selected" : ""}>Хочу попробовать</option></select>
+    ${d.status === "used" ? `<label><input type="checkbox" id="fBag" ${d.inBag ? "checked" : ""} style="width:auto"> Сейчас в моей косметичке</label>
+    <label>Вердикт</label><select id="fVer"><option value="" ${!d.verdict ? "selected" : ""}>Пока не решила</option><option value="take" ${d.verdict === "take" ? "selected" : ""}>✓ Берём</option><option value="skip" ${d.verdict === "skip" ? "selected" : ""}>✕ Не берём</option></select>
+    <div class="row"><div><label>Открыла</label><input id="fOpen" type="date" value="${esc(d.opened)}"></div><div><label>Срок после вскрытия, мес.</label><input id="fPao" type="number" inputmode="numeric" value="${esc(d.pao)}"></div></div>
+    <label>Годен до (если на упаковке)</label><input id="fExp" type="date" value="${esc(d.expiry)}">` : ""}
+    ${d.kind === "care" ? `<label>Активный компонент (для подсказок в рутине)</label><select id="fAct">${ACTIVES.map(a => `<option value="${a}" ${a === (d.active || "") ? "selected" : ""}>${a || "нет"}</option>`).join("")}</select>` : ""}
+    <label>Комментарий</label><textarea id="fCom" rows="3">${esc(d.comment)}</textarea>
+    <div style="height:12px"></div><button class="btn p big" id="fSave">Сохранить</button>
+    ${isNew ? "" : `<div style="height:8px"></div><button class="btn big" id="fDel" style="color:var(--no)">Удалить</button>`}
+    <div style="height:8px"></div><button class="btn big" id="fCancel">Отмена</button></div></div>`;
+    const sync = () => {
+      const g = id => { const e = $("#" + id); return e ? e.value : undefined; };
+      d.brand = g("fBrand"); d.name = g("fName"); d.shade = g("fShade"); d.price = g("fPrice"); d.where = g("fWhere");
+      d.comment = g("fCom");
+      if ($("#fOpen")) { d.opened = g("fOpen"); d.pao = g("fPao"); d.expiry = g("fExp"); d.verdict = g("fVer"); d.inBag = $("#fBag").checked; }
+      if ($("#fAct")) d.active = g("fAct");
+    };
+    $("#fKind").onchange = e => { sync(); d.kind = e.target.value; d.cat = ""; d.sub = ""; draw(); };
+    $("#fCat").onchange = e => { sync(); d.cat = e.target.value; d.sub = ""; draw(); };
+    $("#fSub").onchange = e => { d.sub = e.target.value; };
+    $("#fStatus").onchange = e => { sync(); d.status = e.target.value; draw(); };
+    $("#fPhBtn").onclick = () => $("#fPh").click();
+    $("#fPh").onchange = async e => { const f = e.target.files[0]; if (!f) return; sync(); try { d.photo = await compress(f); draw(); } catch (x) { alert("Не получилось загрузить фото"); } };
+    $("#fCancel").onclick = () => { $("#modal").innerHTML = ""; };
+    if ($("#fDel")) $("#fDel").onclick = async () => { if (confirm("Удалить это средство навсегда?")) { await store.del(d.id); $("#modal").innerHTML = ""; } };
+    $("#fSave").onclick = async () => {
+      sync(); d.sub = $("#fSub").value; d.cat = $("#fCat").value;
+      if (!d.brand && !d.name) { alert("Впиши бренд или название"); return; }
+      if (d.status !== "used") { d.inBag = false; }
+      await store.save(d); $("#modal").innerHTML = "";
+    };
+  };
+  draw();
+}
+
+function openPicker(slot) {
+  const care = items.filter(i => i.kind === "care" && i.status === "used").sort((a, b) => (b.inBag ? 1 : 0) - (a.inBag ? 1 : 0));
+  $("#modal").innerHTML = `<div class="ov"><div class="sheet"><h2>${slot === "am" ? "Утро" : "Вечер"}: выбери средство</h2>${care.length ? care.map(i => `<div class="mini" data-a="pick" data-id="${i.id}" data-slot="${slot}">${thumb(i)}<div class="n">${title(i)}<div style="font-size:12px;color:var(--mute)">${esc(i.sub || "")}${i.inBag ? " · в косметичке" : ""}</div></div></div>`).join("") : `<div class="empty">Сначала добавь средства ухода в каталог.</div>`}<div style="height:10px"></div><button class="btn big" id="pkX">Закрыть</button></div></div>`;
+  $("#pkX").onclick = () => { $("#modal").innerHTML = ""; };
+}
+
+/* ---------- события ---------- */
+async function saveRoutine() { await store.saveRoutine(routine); }
+document.addEventListener("click", async e => {
+  const t = e.target.closest("[data-a]"); if (!t) return;
+  const a = t.dataset.a, v = t.dataset.v, id = t.dataset.id;
+  if (a === "tab") { ui.tab = v; ui.flt = "all"; ui.cat = ""; ui.sub = ""; render(); }
+  else if (a === "kind") { ui.kind = v; ui.cat = ""; ui.sub = ""; render(); }
+  else if (a === "cat") { ui.cat = v; ui.sub = ""; render(); }
+  else if (a === "sub") { ui.sub = v; render(); }
+  else if (a === "flt") { ui.flt = v; render(); }
+  else if (a === "shop") { ui.shop = v; render(); }
+  else if (a === "day") { ui.day = v; render(); }
+  else if (a === "add") openForm(null);
+  else if (a === "edit") openForm(items.find(x => x.id === id));
+  else if (a === "bag") { const it = items.find(x => x.id === id); await store.save(Object.assign({}, it, {inBag: !it.inBag})); }
+  else if (a === "bought") { const it = items.find(x => x.id === id); await store.save(Object.assign({}, it, {status: "used"})); }
+  else if (a === "addslot") openPicker(t.dataset.slot);
+  else if (a === "pick") {
+    const d = routine.days[ui.day] || {am: [], pm: []};
+    const s = t.dataset.slot; d[s] = (d[s] || []).concat(id);
+    routine = Object.assign({}, routine, {days: Object.assign({}, routine.days, {[ui.day]: d})});
+    $("#modal").innerHTML = ""; await saveRoutine();
+  }
+  else if (a === "rmslot") {
+    const d = routine.days[ui.day]; const s = t.dataset.slot; d[s] = d[s].filter((_, i) => i !== Number(t.dataset.n));
+    await saveRoutine();
+  }
+  else if (a === "copyday") {
+    if (!confirm("Заменить все дни недели этим днём?")) return;
+    const d = routine.days[ui.day] || {am: [], pm: []}; const days = {};
+    DAYS.forEach(x => { days[x[0]] = {am: (d.am || []).slice(), pm: (d.pm || []).slice()}; });
+    routine = Object.assign({}, routine, {days}); await saveRoutine();
+  }
+});
+$("#menuBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify({items, routine}, null, 1)], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = "beauty_copy_" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+};
+
+/* ---------- старт ---------- */
+(async () => {
+  render();
+  store = await makeStore();
+  store.sub(p => {
+    if (p.items) items = p.items;
+    if (p.routine) routine = p.routine.days ? p.routine : {days: {}};
+    render();
+  });
+})();
+</script>
+</body>
+</html>
